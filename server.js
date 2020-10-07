@@ -1,10 +1,11 @@
 const express = require("express");
 const userRouter = require("./users/userRouter");
+const postRouter = require("./posts/postRouter")
 const server = express();
 
 server.use(express.json());
 server.use(logger("short"));
-server.use("/api/users", userRouter);
+server.use("/api/users", postRouter);
 
 server.use((err, req, res, next) => {
   console.log(err);
