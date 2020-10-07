@@ -3,7 +3,7 @@ const userRouter = require("./users/userRouter");
 const server = express();
 
 server.use(express.json());
-server.use(logger("long"));
+server.use(logger("short"));
 server.use("/api/users", userRouter);
 
 server.use((err, req, res, next) => {
