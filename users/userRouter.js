@@ -4,29 +4,35 @@ const postModel = require("../posts/postDb");
 
 const router = express.Router();
 
-router.post("/", validateUser(), (req, res) => {
+router.post("/", validateUser(), async (req, res) => {
   // do your magic!
-  userModel
-    .insert(req.body)
-    .then((post) => {
-      res.status(201).json(post);
-    })
-    .catch((error) => {
-      next(error);
-    }); // a shorter way to call next with the error
+  try {
+    const user = await userModel.insert(req.body);
+
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  } // a shorter way to call next with the error
 });
 
-router.post("/:id/posts", validatePost(), validateUserId(), (req, res) => {
-  // do your magic!
-  postModel
-    .insert({ text: req.body.text, user_id: req.params.id })
-    .then((post) => {
+router.post(
+  "/:id/posts",
+  validatePost(),
+  validateUserId(),
+  async (req, res) => {
+    // do your magic!
+    try {
+      const post = await postModel.insert({
+        text: req.body.text,
+        user_id: req.params.id,
+      });
+
       res.status(201).json(post);
-    })
-    .catch((error) => {
+    } catch (error) {
       next(error);
-    });
-});
+    }
+  }
+);
 
 router.get("/", async (req, res) => {
   // do your magic!
@@ -116,7 +122,7 @@ function validateUserId() {
 
 function validateUser() {
   // do your magic!
-  return  (req, res, next) => {
+  return (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).json({
         message: "missing user data",
