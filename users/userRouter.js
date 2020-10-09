@@ -19,7 +19,7 @@ router.post(
   "/:id/posts",
   validatePost(),
   validateUserId(),
-  async (req, res) => {
+  async (req, res, next) => {
     // do your magic!
     try {
       const post = await postModel.insert({
@@ -34,7 +34,7 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   // do your magic!
   try {
     const user = await userModel.get();
@@ -49,7 +49,7 @@ router.get("/:id", validateUserId(), (req, res) => {
   res.status(200).json(req.user);
 });
 
-router.get("/:id/posts", validateUserId(), async (req, res) => {
+router.get("/:id/posts", validateUserId(), async (req, res, next) => {
   // do your magic!
   try {
     const user = await userModel.getUserPosts(req.params.id);
@@ -59,7 +59,7 @@ router.get("/:id/posts", validateUserId(), async (req, res) => {
   }
 });
 
-router.delete("/:id", validateUserId(), async (req, res) => {
+router.delete("/:id", validateUserId(), async (req, res, next) => {
   // do your magic!
   try {
     const user = await userModel.remove(req.params.id);
@@ -78,7 +78,7 @@ router.delete("/:id", validateUserId(), async (req, res) => {
   }
 });
 
-router.put("/:id", validateUser(), validateUserId(), async (req, res) => {
+router.put("/:id", validateUser(), validateUserId(), async (req, res, next) => {
   // do your magic!
   try {
     const user = await userModel.update(req.params.id, req.body);
@@ -107,7 +107,7 @@ function validateUserId() {
         req.user = user;
         next();
       } else {
-        res.status(400).json({
+        res.status(404).json({
           message: "Invalid user id",
         });
       }
