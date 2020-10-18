@@ -1,10 +1,10 @@
-const express = require("express");
-const userModel = require("../users/userDb");
-const postModel = require("../posts/postDb");
+const express = require('express');
+const userModel = require('../users/userDb');
+const postModel = require('../posts/postDb');
 
 const router = express.Router();
 
-router.post("/", validateUser(), async (req, res) => {
+router.post('/', validateUser(), async (req, res) => {
   // do your magic!
   try {
     const user = await userModel.insert(req.body);
@@ -16,7 +16,7 @@ router.post("/", validateUser(), async (req, res) => {
 });
 
 router.post(
-  "/:id/posts",
+  '/:id/posts',
   validatePost(),
   validateUserId(),
   async (req, res) => {
@@ -34,7 +34,7 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   // do your magic!
   try {
     const user = await userModel.get();
@@ -44,12 +44,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", validateUserId(), (req, res) => {
+router.get('/:id', validateUserId(), (req, res) => {
   // do your magic!
   res.status(200).json(req.user);
 });
 
-router.get("/:id/posts", validateUserId(), async (req, res) => {
+router.get('/:id/posts', validateUserId(), async (req, res) => {
   // do your magic!
   try {
     const user = await userModel.getUserPosts(req.params.id);
@@ -59,18 +59,18 @@ router.get("/:id/posts", validateUserId(), async (req, res) => {
   }
 });
 
-router.delete("/:id", validateUserId(), async (req, res) => {
+router.delete('/:id', validateUserId(), async (req, res) => {
   // do your magic!
   try {
     const user = await userModel.remove(req.params.id);
 
     if (user > 0) {
       res.status(200).json({
-        message: "The user has been nuked",
+        message: 'The user has been nuked',
       });
     } else {
       res.status(404).json({
-        message: "The user could not be found",
+        message: 'The user could not be found',
       });
     }
   } catch (error) {
@@ -78,7 +78,7 @@ router.delete("/:id", validateUserId(), async (req, res) => {
   }
 });
 
-router.put("/:id", validateUser(), validateUserId(), async (req, res) => {
+router.put('/:id', validateUser(), validateUserId(), async (req, res) => {
   // do your magic!
   try {
     const user = await userModel.update(req.params.id, req.body);
@@ -87,7 +87,7 @@ router.put("/:id", validateUser(), validateUserId(), async (req, res) => {
       res.status(200).json(user);
     } else {
       res.status(404).json({
-        message: "The user could not be found",
+        message: 'The user could not be found',
       });
     }
   } catch (error) {
@@ -108,13 +108,13 @@ function validateUserId() {
         next();
       } else {
         res.status(400).json({
-          message: "Invalid user id",
+          message: 'Invalid user id',
         });
       }
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "Error retrieving the user",
+        message: 'Error retrieving the user',
       });
     }
   };
@@ -125,11 +125,11 @@ function validateUser() {
   return (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).json({
-        message: "missing user data",
+        message: 'missing user data',
       });
     } else if (!req.body.name) {
       res.status(400).json({
-        message: "missing required name field",
+        message: 'missing required name field',
       });
     } else {
       next();
@@ -142,11 +142,11 @@ function validatePost() {
   return (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).json({
-        message: "missing post data",
+        message: 'missing post data',
       });
     } else if (!req.body.text) {
       res.status(400).json({
-        message: "missing required text field",
+        message: 'missing required text field',
       });
     }
 
